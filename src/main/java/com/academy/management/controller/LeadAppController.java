@@ -78,4 +78,9 @@ public class LeadAppController {
         try { return ResponseEntity.ok(leadAppService.getAllLeads()); }
         catch (SQLException e) { e.printStackTrace(); return ResponseEntity.status(500).build(); }
     }
+    @GetMapping("/test")
+    public String test() {
+        return "API is working!";
+    }
+
 } 

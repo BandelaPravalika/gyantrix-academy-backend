@@ -383,32 +383,32 @@
 
 package com.academy.management.dao;
 
-import com.academy.management.model.LeadApp;
-import org.springframework.stereotype.Repository;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.academy.management.model.LeadApp;
 
 @Repository
 public class LeadAppDao {
 
     // PostgreSQL connection
-    private Connection getConnection() throws SQLException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("PostgreSQL JDBC Driver not found", e);
-        }
+	@Autowired
+	private DataSource dataSource;
 
-        return DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/gyantrix_academy", // your DB name
-                "postgres",                                          // your DB username
-                "Pravalika@1460"                                     // your DB password
-        );
+	private Connection getConnection() throws SQLException {
+	    return dataSource.getConnection();
+	}
 
-    }
 
     // Generate next business number
     private Long getNextBusinessNumber() throws SQLException {
