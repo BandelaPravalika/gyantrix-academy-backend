@@ -1,14 +1,14 @@
-# Use Java 17
-FROM openjdk:17
+# Use supported Java 17 image
+FROM eclipse-temurin:17-jdk
 
 # Set working directory
 WORKDIR /app
 
-# Copy everything
-COPY . .
+# Copy the Maven/Gradle build artifact (JAR)
+COPY target/*.jar app.jar
 
-# Build the project
-RUN ./mvnw clean package -DskipTests
+# Expose port (Render assigns dynamically)
+EXPOSE 8080
 
-# Run the jar file
-CMD ["java", "-jar", "target/gyantrix-academy-backend-0.0.1-SNAPSHOT.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
