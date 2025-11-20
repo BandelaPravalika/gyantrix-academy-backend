@@ -1,6 +1,8 @@
 package com.academy.management.controller;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -108,9 +110,19 @@ public class LeadAppController {
     }
     
     @GetMapping("/db-test-lead")
-    public String testLead() throws SQLException {
-        List<LeadApp> leads = leadAppService.getAllLeads();
-        return "Leads count: " + leads.size();
+    public String testLead() {
+        String sql = "SELECT COUNT(*) AS total FROM \"App_Leads\""; // <- quotes if table has uppercase
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return "Total rows in App_Leads = " + rs.getInt("total");
+            }
+            return "Query executed but no rows found.";
+        } catch (Exception e) {
+            return "DB ERROR: " + e.getMessage();
+        }
     }
 
 
