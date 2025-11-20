@@ -106,5 +106,12 @@ public class LeadAppController {
             return "DB connection failed: " + e.getMessage();
         }
     }
+    
+    @GetMapping("/db-test-lead")
+    public String testLead() throws SQLException {
+        List<LeadApp> leads = leadAppService.getAllLeads();
+        return "Leads count: " + leads.size();
+    }
+
 
 } 
