@@ -549,7 +549,7 @@ public class LeadAppDao {
 
     // Get All Leads
     public List<LeadApp> getAllLeads() throws SQLException {
-        String query = "SELECT * FROM app_leads ORDER BY business_number ASC";
+        String query = "SELECT * FROM public.app_leads ORDER BY business_number ASC";
         List<LeadApp> leads = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
