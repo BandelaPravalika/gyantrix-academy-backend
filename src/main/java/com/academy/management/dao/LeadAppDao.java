@@ -412,7 +412,7 @@ public class LeadAppDao {
 
     // Generate next business number
     private Long getNextBusinessNumber() throws SQLException {
-        String query = "SELECT COALESCE(MAX(business_number), 0) + 1 AS next_bn FROM public.app_leads";
+        String query = "SELECT COALESCE(MAX(business_number), 0) + 1 AS next_bn FROM app_leads";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -423,7 +423,7 @@ public class LeadAppDao {
 
     // Save Lead (POST)
     public LeadApp saveLead(LeadApp lead) throws SQLException {
-        String insertQuery = "INSERT INTO public.app_leads " +
+        String insertQuery = "INSERT INTO app_leads " +
                 "(business_number, name, email, mobile_number, source, status, course, message, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -457,7 +457,7 @@ public class LeadAppDao {
 
     // Full Update (PUT)
     public LeadApp updateLead(Long id, LeadApp lead) throws SQLException {
-        String updateQuery = "UPDATE public.app_leads SET name=?, email=?, mobile_number=?, source=?, status=?, course=?, message=?, updated_at=? WHERE id=?";
+        String updateQuery = "UPDATE app_leads SET name=?, email=?, mobile_number=?, source=?, status=?, course=?, message=?, updated_at=? WHERE id=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(updateQuery)) {
 
@@ -493,7 +493,7 @@ public class LeadAppDao {
         if (lead.getMessage() != null) existing.setMessage(lead.getMessage());
         existing.setUpdatedAt(new Date());
 
-        String updateQuery = "UPDATE public.app_leads SET name=?, email=?, mobile_number=?, source=?, status=?, course=?, message=?, updated_at=? WHERE id=?";
+        String updateQuery = "UPDATE app_leads SET name=?, email=?, mobile_number=?, source=?, status=?, course=?, message=?, updated_at=? WHERE id=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(updateQuery)) {
 
@@ -514,7 +514,7 @@ public class LeadAppDao {
 
     // Delete Lead
     public boolean deleteLead(Long id) throws SQLException {
-        String deleteQuery = "DELETE FROM public.app_leads WHERE id=?";
+        String deleteQuery = "DELETE FROM app_leads WHERE id=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(deleteQuery)) {
             ps.setLong(1, id);
@@ -524,7 +524,7 @@ public class LeadAppDao {
 
     // Get Lead by ID
     public LeadApp getLeadById(Long id) throws SQLException {
-        String query = "SELECT * FROM public.app_leads WHERE id=?";
+        String query = "SELECT * FROM app_leads WHERE id=?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setLong(1, id);
@@ -549,7 +549,7 @@ public class LeadAppDao {
 
     // Get All Leads
     public List<LeadApp> getAllLeads() throws SQLException {
-        String query = "SELECT * FROM public.app_leads ORDER BY business_number ASC";
+        String query = "SELECT * FROM app_leads ORDER BY business_number ASC";
         List<LeadApp> leads = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(query);
@@ -566,8 +566,11 @@ public class LeadAppDao {
                 lead.setStatus(rs.getString("status"));
                 lead.setCourse(rs.getString("course"));
                 lead.setMessage(rs.getString("message"));
-                lead.setCreatedAt(rs.getDate("created_at"));
-                lead.setUpdatedAt(rs.getDate("updated_at"));
+//                lead.setCreatedAt(rs.getDate("created_at"));
+//                lead.setUpdatedAt(rs.getDate("updated_at"));
+                lead.setCreatedAt(rs.getTimestamp("created_at"));
+                lead.setUpdatedAt(rs.getTimestamp("updated_at"));
+
                 leads.add(lead);
             }
         }
