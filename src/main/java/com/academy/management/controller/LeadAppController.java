@@ -111,19 +111,23 @@ public class LeadAppController {
     
     @GetMapping("/db-test-lead")
     public String testLead() {
-        String sql = "SELECT COUNT(*) AS total FROM app_leads"; // <- quotes if table has uppercase
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        String[] tables = {"app_leads", "\"App_Leads\""};
+        for (String table : tables) {
+            String sql = "SELECT COUNT(*) AS total FROM " + table;
+            try (Connection conn = dataSource.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
 
-            if (rs.next()) {
-                return "Total rows in App_Leads = " + rs.getInt("total");
+                if (rs.next()) {
+                    return "Total rows in " + table + " = " + rs.getInt("total");
+                }
+            } catch (Exception e) {
+                // ignore, try next
             }
-            return "Query executed but no rows found.";
-        } catch (Exception e) {
-            return "DB ERROR: " + e.getMessage();
         }
+        return "DB ERROR: Table not found in public schema";
     }
+
 
 
 } 
