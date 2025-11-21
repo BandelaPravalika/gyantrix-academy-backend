@@ -111,7 +111,7 @@ public class LeadAppController {
     
     @GetMapping("/db-test-lead")
     public String testLead() {
-        String sql = "SELECT COUNT(*) AS total FROM \"App_Leads\""; // <- quotes if table has uppercase
+        String sql = "SELECT COUNT(*) AS total FROM app_leads"; // <- quotes if table has uppercase
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
